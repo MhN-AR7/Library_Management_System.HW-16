@@ -1,0 +1,93 @@
+package ir.library.repository;
+
+import ir.library.exception.MemberNotFoundException;
+import ir.library.exception.RepositoryException;
+import ir.library.model.Member;
+import ir.library.util.DatabaseConfig;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class MemberRepository {
+    public Long create(Member member) throws RepositoryException {
+        Connection connection = DatabaseConfig.getConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(
+                "INSERT INTO members (full_name, phone_number) VALUES (?, ?)"
+        )) {
+            ps.setString(1, member.getFullName());
+            ps.setString(2, member.getPhoneNumber());
+
+            ps.executeUpdate();
+            return member.getId();
+        }
+        catch (SQLException e) {
+            throw new RepositoryException("PostgreSQL Syntax Incorrect!");
+        }
+    }
+
+    public Member read(Long id) throws RepositoryException {
+        Connection connection = DatabaseConfig.getConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM members WHERE id = ?"
+        )) {
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (!rs.next()) {
+                throw new MemberNotFoundException("Member Not Found!");
+            }
+
+            return new Member(
+                    rs.getLong("id"),
+                    rs.getString("full_name"),
+                    rs.getString("phone_number")
+            );
+        }
+        catch (SQLException e) {
+            throw new RepositoryException("PostgreSQL Syntax Incorrect!");
+        }
+    }
+
+    public Member update(Member member) throws RepositoryException {
+        Connection connection = DatabaseConfig.getConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(
+                "UPDATE members SET full_name = ?, phone_number = ? WHERE id = ?"
+        )) {
+            ps.setString(1, member.getFullName());
+            ps.setString(2, member.getPhoneNumber());
+            ps.setLong(3, member.getId());
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) throw new MemberNotFoundException("Member Not Found!");
+
+            return new Member(member.getId(), member.getFullName(), member.getPhoneNumber());
+        }
+        catch (SQLException e) {
+            throw new RepositoryException("PostgreSQL Syntax Incorrect!");
+        }
+    }
+
+    public Long delete(Long id) throws RepositoryException {
+        Connection connection = DatabaseConfig.getConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(
+                "DELETE FROM members WHERE id = ?"
+        )) {
+            ps.setLong(1, id);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new MemberNotFoundException("Member Not Found!");
+            }
+
+            return id;
+        }
+        catch (SQLException e) {
+            throw new RepositoryException("PostgreSQL Syntax Incorrect!");
+        }
+    }
+}
