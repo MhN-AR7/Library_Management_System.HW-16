@@ -69,5 +69,17 @@ public class LibraryService {
                 .orElseThrow(() -> new BookNotFoundException("Book Not Found!"));
     }
 
+    public Member changeMemberFullName(Long id, String newFullName) throws DatabaseRepositoryException {
+        if (id == null || id <= 0)
+            throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
 
+        if (newFullName == null || newFullName.isBlank() || newFullName.length() > 100)
+            throw new IllegalArgumentException("New Full Name Cannot be Null or Empty and The Length Must Less Than 100!");
+
+        if (!memberRepository.updateFullName(id, newFullName))
+            throw new MemberNotFoundException("Member Not Found!");
+
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new MemberNotFoundException("Member Not Found!"));
+    }
 }
