@@ -1,5 +1,6 @@
 package ir.library.service;
 
+import ir.library.exception.BookNotFoundException;
 import ir.library.exception.DatabaseRepositoryException;
 import ir.library.exception.DuplicateMemberException;
 import ir.library.exception.MemberNotFoundException;
@@ -50,7 +51,7 @@ public class LibraryService {
 
     public Member getMemberById(Long id) throws DatabaseRepositoryException {
         if (id == null || id <= 0)
-            throw new IllegalArgumentException("ID Cannot be Null or Negative!");
+            throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
 
 //        Optional<Member> optionalMember = memberRepository.findById(id);
 //        if (optionalMember.isEmpty()) throw new MemberNotFoundException("Member Not Found!");
@@ -59,4 +60,14 @@ public class LibraryService {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException("Member Not Found!"));
     }
+
+    public Book getBookById(Long id) throws DatabaseRepositoryException {
+        if (id == null || id <= 0)
+            throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
+
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("Book Not Found!"));
+    }
+
+
 }
