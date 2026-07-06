@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class BookRepository {
     public Long insert(Book book) throws DatabaseRepositoryException {
@@ -32,7 +33,7 @@ public class BookRepository {
         }
     }
 
-    public Book read(Long id) throws DatabaseRepositoryException {
+    public Optional<Book> findById(Long id) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -40,20 +41,21 @@ public class BookRepository {
         )) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                throw new BookNotFoundException("Book Not Found!");
+            if (rs.next()) {
+                Book book = new Book(
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getDouble("price"),
+                        rs.getInt("stock")
+                );
+                book.setId(id);
+                return Optional.of(book);
             }
 
-            return new Book(
-                    rs.getLong("id"),
-                    rs.getString("title"),
-                    rs.getString("author"),
-                    rs.getDouble("price"),
-                    rs.getInt("stock")
-            );
+            return Optional.empty();
         }
         catch (SQLException e) {
-            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("Book Find By ID From Database Failed!");
         }
     }
 
