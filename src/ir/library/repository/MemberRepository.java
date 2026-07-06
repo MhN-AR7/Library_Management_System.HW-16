@@ -52,24 +52,21 @@ public class MemberRepository {
         }
     }
 
-    public Member update(Member member) throws DatabaseRepositoryException {
+    public boolean updateFullName(Long id, String newFullName) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
-                "UPDATE members SET full_name = ?, phone_number = ? WHERE id = ?"
+                "UPDATE members SET full_name = ? WHERE id = ?"
         )) {
-            ps.setString(1, member.getFullName());
-            ps.setString(2, member.getPhoneNumber());
-            ps.setLong(3, member.getId());
+            ps.setString(1, newFullName);
+            ps.setLong(2, id);
 
             int rowsAffected = ps.executeUpdate();
-            if (rowsAffected == 0) throw new MemberNotFoundException("Member Not Found!");
 
-            System.out.println("Member Updated Successfully!");
-            return new Member(member.getId(), member.getFullName(), member.getPhoneNumber());
+            return !(rowsAffected == 0);
         }
         catch (SQLException e) {
-            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("Update Member Full Name From Database Failed!");
         }
     }
 
