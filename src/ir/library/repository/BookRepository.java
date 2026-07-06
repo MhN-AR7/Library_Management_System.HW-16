@@ -1,7 +1,7 @@
 package ir.library.repository;
 
 import ir.library.exception.BookNotFoundException;
-import ir.library.exception.RepositoryException;
+import ir.library.exception.DatabaseRepositoryException;
 import ir.library.model.Book;
 import ir.library.util.DatabaseConfig;
 
@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BookRepository {
-    public Long create(Book book) throws RepositoryException {
+    public Long create(Book book) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -25,14 +25,14 @@ public class BookRepository {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getLong("id");
 
-            throw new RepositoryException("Member ID Not Returned!");
+            throw new DatabaseRepositoryException("Member ID Not Returned!");
         }
         catch (SQLException e) {
-            throw new RepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
         }
     }
 
-    public Book read(Long id) throws RepositoryException {
+    public Book read(Long id) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -53,11 +53,11 @@ public class BookRepository {
             );
         }
         catch (SQLException e) {
-            throw new RepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
         }
     }
 
-    public Book update(Book book) throws RepositoryException {
+    public Book update(Book book) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -75,11 +75,11 @@ public class BookRepository {
             return new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPrice(), book.getStock());
         }
         catch (SQLException e) {
-            throw new RepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
         }
     }
 
-    public Long delete(Long id) throws RepositoryException {
+    public Long delete(Long id) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -94,7 +94,7 @@ public class BookRepository {
             return id;
         }
         catch (SQLException e) {
-            throw new RepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
         }
     }
 }

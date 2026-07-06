@@ -1,7 +1,7 @@
 package ir.library.repository;
 
 import ir.library.exception.MemberNotFoundException;
-import ir.library.exception.RepositoryException;
+import ir.library.exception.DatabaseRepositoryException;
 import ir.library.model.Member;
 import ir.library.util.DatabaseConfig;
 
@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MemberRepository {
-    public Long insert(Member member) throws RepositoryException {
+    public Long insert(Member member) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -23,14 +23,14 @@ public class MemberRepository {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getLong("id");
 
-            throw new RepositoryException("Member ID Not Returned!");
+            throw new DatabaseRepositoryException("Member ID Not Returned!");
         }
         catch (SQLException e) {
-            throw new RepositoryException("Member Insertion to Database Failed!");
+            throw new DatabaseRepositoryException("Member Insertion to Database Failed!");
         }
     }
 
-    public Member read(Long id) throws RepositoryException {
+    public Member read(Long id) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -49,11 +49,11 @@ public class MemberRepository {
             );
         }
         catch (SQLException e) {
-            throw new RepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
         }
     }
 
-    public Member update(Member member) throws RepositoryException {
+    public Member update(Member member) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -70,11 +70,11 @@ public class MemberRepository {
             return new Member(member.getId(), member.getFullName(), member.getPhoneNumber());
         }
         catch (SQLException e) {
-            throw new RepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
         }
     }
 
-    public Long delete(Long id) throws RepositoryException {
+    public Long delete(Long id) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -91,7 +91,7 @@ public class MemberRepository {
             return id;
         }
         catch (SQLException e) {
-            throw new RepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
         }
     }
 }
