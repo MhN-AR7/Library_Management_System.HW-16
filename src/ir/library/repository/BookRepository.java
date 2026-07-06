@@ -59,25 +59,21 @@ public class BookRepository {
         }
     }
 
-    public Book update(Book book) throws DatabaseRepositoryException {
+    public boolean updatePrice(Long id, Double newPrice) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
-                "UPDATE books SET title = ?, author = ?, price = ?, stock = ? WHERE id = ?"
+                "UPDATE books SET price = ? WHERE id = ?"
         )) {
-            ps.setString(1, book.getTitle());
-            ps.setString(2, book.getAuthor());
-            ps.setDouble(3, book.getPrice());
-            ps.setInt(4, book.getStock());
+            ps.setDouble(1, newPrice);
+            ps.setLong(2, id);
 
             int rowsAffected = ps.executeUpdate();
-            if (rowsAffected == 0) throw new BookNotFoundException("Book Not Found!");
 
-            System.out.println("Book Updated Successfully!");
-            return new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPrice(), book.getStock());
+            return !(rowsAffected == 0);
         }
         catch (SQLException e) {
-            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("Update Book Price From Database Failed!");
         }
     }
 
