@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BookRepository {
-    public Long create(Book book) throws DatabaseRepositoryException {
+    public Long insert(Book book) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(

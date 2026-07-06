@@ -7,8 +7,7 @@ public class Book {
     private Double price;
     private Integer stock;
 
-    public Book(Long id, String title, String author, Double price, Integer stock) {
-        this.id = id;
+    public Book(String title, String author, Double price, Integer stock) {
         this.title = title;
         this.author = author;
         this.price = price;

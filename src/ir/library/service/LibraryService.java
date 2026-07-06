@@ -2,6 +2,7 @@ package ir.library.service;
 
 import ir.library.exception.DatabaseRepositoryException;
 import ir.library.exception.DuplicateMemberException;
+import ir.library.model.Book;
 import ir.library.model.Member;
 import ir.library.repository.BookRepository;
 import ir.library.repository.MemberRepository;
@@ -26,5 +27,21 @@ public class LibraryService {
             throw new DuplicateMemberException("Phone Number Already Exist!");
 
         return memberRepository.insert(new Member(fullName, phoneNumber));
+    }
+
+    public Long registerBook(String title, String author, Double price, Integer stock) throws DatabaseRepositoryException {
+        if (title == null || title.isBlank() || title.length() > 100)
+            throw new IllegalArgumentException("Title Cannot be Null or Empty and The Length Must Less Than 100!");
+
+        if (author == null || author.isBlank() || author.length() > 100)
+            throw new IllegalArgumentException("Author Cannot be Null or Empty and The Length Must Less Than 100!");
+
+        if (price == null || price < 0)
+            throw new IllegalArgumentException("Price Cannot be Null or Negative!");
+
+        if (stock == null || stock < 0)
+            throw new IllegalArgumentException("Stock Cannot be Null or Negative!");
+
+        return bookRepository.insert(new Book(title, author, price, stock));
     }
 }
