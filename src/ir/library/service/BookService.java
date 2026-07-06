@@ -1,0 +1,42 @@
+package ir.library.service;
+
+import ir.library.exception.BookNotFoundException;
+import ir.library.exception.DatabaseRepositoryException;
+import ir.library.model.Book;
+import ir.library.repository.BookRepository;
+
+public class BookService {
+    private BookRepository bookRepository;
+
+    public BookService() {
+        this.bookRepository = new BookRepository();
+    }
+
+    public Long registerBook(String title, String author, Double price, Integer stock) throws DatabaseRepositoryException {
+        if (title == null || title.isBlank() || title.length() > 100)
+            throw new IllegalArgumentException("Title Cannot be Null or Empty and The Length Must Less Than 100!");
+
+        if (author == null || author.isBlank() || author.length() > 100)
+            throw new IllegalArgumentException("Author Cannot be Null or Empty and The Length Must Less Than 100!");
+
+        if (price == null || price < 0)
+            throw new IllegalArgumentException("Price Cannot be Null or Negative!");
+
+        if (stock == null || stock < 0)
+            throw new IllegalArgumentException("Stock Cannot be Null or Negative!");
+
+        return bookRepository.insert(new Book(title, author, price, stock));
+    }
+
+    public Book getBookById(Long id) throws DatabaseRepositoryException {
+        if (id == null || id <= 0)
+            throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
+
+//        Optional<Book> optionalBook = bookRepository.findById(id);
+//        if (optionalBook.isEmpty()) throw new BookNotFoundException("Book Not Found!");
+//        return optionalBook.get();
+
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("Book Not Found!"));
+    }
+}
