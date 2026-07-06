@@ -11,21 +11,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MemberRepository {
-    public Long create(Member member) throws RepositoryException {
+    public Long insert(Member member) throws RepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO members (full_name, phone_number) VALUES (?, ?)"
+                "INSERT INTO members (full_name, phone_number) VALUES (?, ?) RETURNING id"
         )) {
             ps.setString(1, member.getFullName());
             ps.setString(2, member.getPhoneNumber());
 
-            ps.executeUpdate();
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getLong("id");
 
-            return member.getId();
+            throw new RepositoryException("Member ID Not Returned!");
         }
         catch (SQLException e) {
-            throw new RepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new RepositoryException("Member Insertion to Database Failed!");
         }
     }
 

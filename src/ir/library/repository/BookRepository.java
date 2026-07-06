@@ -15,15 +15,17 @@ public class BookRepository {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO books (title, author, price, stock) VALUES (?, ?, ?, ?)"
+                "INSERT INTO books (title, author, price, stock) VALUES (?, ?, ?, ?) RETURNING id"
         )) {
             ps.setString(1, book.getTitle());
             ps.setString(2, book.getAuthor());
             ps.setDouble(3, book.getPrice());
             ps.setInt(4, book.getStock());
 
-            ps.executeUpdate();
-            return book.getId();
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getLong("id");
+
+            throw new RepositoryException("Member ID Not Returned!");
         }
         catch (SQLException e) {
             throw new RepositoryException("PostgreSQL Syntax Incorrect!");
