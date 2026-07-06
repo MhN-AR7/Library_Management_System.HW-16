@@ -2,10 +2,13 @@ package ir.library.service;
 
 import ir.library.exception.DatabaseRepositoryException;
 import ir.library.exception.DuplicateMemberException;
+import ir.library.exception.MemberNotFoundException;
 import ir.library.model.Book;
 import ir.library.model.Member;
 import ir.library.repository.BookRepository;
 import ir.library.repository.MemberRepository;
+
+import java.util.Optional;
 
 public class LibraryService {
     private MemberRepository memberRepository;
@@ -43,5 +46,17 @@ public class LibraryService {
             throw new IllegalArgumentException("Stock Cannot be Null or Negative!");
 
         return bookRepository.insert(new Book(title, author, price, stock));
+    }
+
+    public Member getMemberById(Long id) throws DatabaseRepositoryException {
+        if (id == null || id <= 0)
+            throw new IllegalArgumentException("ID Cannot be Null or Negative!");
+
+//        Optional<Member> optionalMember = memberRepository.findById(id);
+//        if (optionalMember.isEmpty()) throw new MemberNotFoundException("Member Not Found!");
+//        return optionalMember.get();
+
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new MemberNotFoundException("Member Not Found!"));
     }
 }
