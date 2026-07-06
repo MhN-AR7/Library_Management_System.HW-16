@@ -21,6 +21,7 @@ public class MemberRepository {
             ps.setString(2, member.getPhoneNumber());
 
             ps.executeUpdate();
+
             return member.getId();
         }
         catch (SQLException e) {
