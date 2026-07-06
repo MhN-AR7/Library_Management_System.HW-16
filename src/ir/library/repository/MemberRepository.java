@@ -94,4 +94,20 @@ public class MemberRepository {
             throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
         }
     }
+
+    public boolean existByPhoneNumber(String phoneNumber) throws DatabaseRepositoryException {
+        Connection connection = DatabaseConfig.getConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM members WHERE phone_number = ?"
+        )) {
+            ps.setString(1, phoneNumber);
+
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        }
+        catch (SQLException e) {
+            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
+        }
+    }
 }

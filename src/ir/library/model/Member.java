@@ -5,8 +5,7 @@ public class Member {
     private String fullName;
     private String phoneNumber;
 
-    public Member(Long id, String fullName, String phoneNumber) {
-        this.id = id;
+    public Member(String fullName, String phoneNumber) {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
     }
