@@ -28,7 +28,7 @@ public class BookRepository {
             throw new DatabaseRepositoryException("Member ID Not Returned!");
         }
         catch (SQLException e) {
-            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("Book Insertion to Database Failed!");
         }
     }
 

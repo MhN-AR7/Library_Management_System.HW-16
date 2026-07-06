@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class MemberRepository {
     public Long insert(Member member) throws DatabaseRepositoryException {
@@ -30,7 +31,7 @@ public class MemberRepository {
         }
     }
 
-    public Member read(Long id) throws DatabaseRepositoryException {
+    public Optional<Member> findById(Long id) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -38,18 +39,16 @@ public class MemberRepository {
         )) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                throw new MemberNotFoundException("Member Not Found!");
+            if (rs.next()) {
+                Member member = new Member(rs.getString("full_name"), rs.getString("phone_number"));
+                member.setId(id);
+                return Optional.of(member);
             }
 
-            return new Member(
-                    rs.getLong("id"),
-                    rs.getString("full_name"),
-                    rs.getString("phone_number")
-            );
+            return Optional.empty();
         }
         catch (SQLException e) {
-            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("Member Find By ID From Database Failed!");
         }
     }
 
