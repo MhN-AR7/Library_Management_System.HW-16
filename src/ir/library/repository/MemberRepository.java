@@ -64,6 +64,7 @@ public class MemberRepository {
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected == 0) throw new MemberNotFoundException("Member Not Found!");
 
+            System.out.println("Member Updated Successfully!");
             return new Member(member.getId(), member.getFullName(), member.getPhoneNumber());
         }
         catch (SQLException e) {
@@ -84,6 +85,7 @@ public class MemberRepository {
                 throw new MemberNotFoundException("Member Not Found!");
             }
 
+            System.out.println("Member Deleted Successfully!");
             return id;
         }
         catch (SQLException e) {

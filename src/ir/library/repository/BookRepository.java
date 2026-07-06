@@ -69,6 +69,7 @@ public class BookRepository {
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected == 0) throw new BookNotFoundException("Book Not Found!");
 
+            System.out.println("Book Updated Successfully!");
             return new Book(book.getId(), book.getTitle(), book.getAuthor(), book.getPrice(), book.getStock());
         }
         catch (SQLException e) {
@@ -87,6 +88,7 @@ public class BookRepository {
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected == 0) throw new BookNotFoundException("Book Not Found!");
 
+            System.out.println("Book Deleted Successfully!");
             return id;
         }
         catch (SQLException e) {
