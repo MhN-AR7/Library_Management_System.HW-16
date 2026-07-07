@@ -6,6 +6,8 @@ import ir.library.exception.MemberNotFoundException;
 import ir.library.model.Member;
 import ir.library.repository.MemberRepository;
 
+import java.util.List;
+
 public class MemberService {
     private MemberRepository memberRepository;
 
@@ -60,5 +62,9 @@ public class MemberService {
             throw new MemberNotFoundException("Member Not Found!");
 
         return id;
+    }
+
+    public List<Member> getAll() throws DatabaseRepositoryException {
+        return memberRepository.findAll();
     }
 }
