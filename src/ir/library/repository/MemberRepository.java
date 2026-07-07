@@ -70,7 +70,7 @@ public class MemberRepository {
         }
     }
 
-    public Long delete(Long id) throws DatabaseRepositoryException {
+    public boolean delete(Long id) throws DatabaseRepositoryException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -79,15 +79,11 @@ public class MemberRepository {
             ps.setLong(1, id);
 
             int rowsAffected = ps.executeUpdate();
-            if (rowsAffected == 0) {
-                throw new MemberNotFoundException("Member Not Found!");
-            }
 
-            System.out.println("Member Deleted Successfully!");
-            return id;
+            return !(rowsAffected == 0);
         }
         catch (SQLException e) {
-            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("Delete Book From Database Failed!");
         }
     }
 
