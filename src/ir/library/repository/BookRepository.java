@@ -44,12 +44,13 @@ public class BookRepository {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Book book = new Book(
+                        rs.getLong("id"),
                         rs.getString("title"),
                         rs.getString("author"),
                         rs.getDouble("price"),
                         rs.getInt("stock")
                 );
-                book.setId(id);
+
                 return Optional.of(book);
             }
 
@@ -105,14 +106,13 @@ public class BookRepository {
             List<Book> books = new ArrayList<>();
 
             while (rs.next()) {
-                //FIXME: use setter for all fields
                 Book newBook = new Book(
+                        rs.getLong("id"),
                         rs.getString("title"),
                         rs.getString("author"),
                         rs.getDouble("price"),
                         rs.getInt("stock")
                 );
-                newBook.setId(rs.getLong("id"));
 
                 books.add(newBook);
             }

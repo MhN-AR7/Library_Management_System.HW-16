@@ -14,6 +14,14 @@ public class Book {
         this.stock = stock;
     }
 
+    public Book(Long id, String title, String author, Double price, Integer stock) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.price = price;
+        this.stock = stock;
+    }
+
     public Long getId() {
         return id;
     }
