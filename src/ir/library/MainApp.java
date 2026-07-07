@@ -21,7 +21,7 @@ public class MainApp {
 
         while (true) {
             System.out.println("""
-                    ==== Library System Management ====
+                    \n==== Library System Management ====
                     
                     1. Insert Member
                     2. Insert Book
