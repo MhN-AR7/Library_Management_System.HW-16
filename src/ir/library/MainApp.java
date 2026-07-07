@@ -3,6 +3,7 @@ package ir.library;
 import ir.library.exception.DatabaseConnectionException;
 import ir.library.exception.DatabaseRepositoryException;
 import ir.library.exception.DuplicateMemberException;
+import ir.library.exception.MemberNotFoundException;
 import ir.library.service.BookService;
 import ir.library.service.MemberService;
 import ir.library.util.DatabaseConfig;
@@ -40,13 +41,13 @@ public class MainApp {
 
             switch (choice) {
                 case 1:
-                    System.out.println("\n---- Inserting Member ----\n");
-                    System.out.println("Enter Member's Full Name: ");
-                    String insertFullName = input.nextLine();
-                    System.out.println("Enter " + insertFullName + "'s Phone Number: ");
-                    String insertPhoneNumber = input.nextLine();
                     try {
-                        Long id = memberService.register(insertFullName, insertPhoneNumber);
+                        System.out.println("\n---- Inserting Member ----\n");
+                        System.out.println("Enter Member's Full Name: ");
+                        String fullName = input.nextLine();
+                        System.out.println("Enter " + fullName + "'s Phone Number: ");
+                        String phoneNumber = input.nextLine();
+                        Long id = memberService.register(fullName, phoneNumber);
                         System.out.println("\nMember Inserted Successfully!\nID: " + id);
                     }
                     catch (IllegalArgumentException | DuplicateMemberException e) {
@@ -54,22 +55,33 @@ public class MainApp {
                     }
                     break;
                 case 2:
-                    System.out.println("\n---- Inserting Book ----\n");
-                    System.out.println("Enter Book's Title: ");
-                    String insertTitle = input.nextLine();
-                    System.out.println("Enter " + insertTitle + "'s Author: ");
-                    String insertAuthor = input.nextLine();
-                    System.out.println("Enter " + insertTitle + "'s Price: ");
-                    Double insertPrice = input.nextDouble();
-                    input.nextLine();
-                    System.out.println("Enter " + insertTitle + "'s Stock: ");
-                    Integer insertStock = input.nextInt();
-                    input.nextLine();
                     try {
-                        Long id = bookService.register(insertTitle, insertAuthor, insertPrice, insertStock);
+                        System.out.println("\n---- Inserting Book ----\n");
+                        System.out.println("Enter Book's Title: ");
+                        String title = input.nextLine();
+                        System.out.println("Enter " + title + "'s Author: ");
+                        String author = input.nextLine();
+                        System.out.println("Enter " + title + "'s Price: ");
+                        Double price = input.nextDouble();
+                        input.nextLine();
+                        System.out.println("Enter " + title + "'s Stock: ");
+                        Integer stock = input.nextInt();
+                        input.nextLine();
+                        Long id = bookService.register(title, author, price, stock);
                         System.out.println("\nBook Inserted Successfully!\nID: " + id);
                     }
                     catch (IllegalArgumentException e) {
+                        System.err.println(e.getMessage());
+                    }
+                    break;
+                case 3:
+                    try {
+                        System.out.println("\n---- Finding Member By ID ----\n");
+                        System.out.println("Enter Member ID: ");
+                        Long id = input.nextLong();
+                        System.out.println(memberService.getById(id));
+                    }
+                    catch (IllegalArgumentException | MemberNotFoundException e) {
                         System.err.println(e.getMessage());
                     }
                     break;
