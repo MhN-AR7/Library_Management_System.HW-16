@@ -39,4 +39,18 @@ public class BookService {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException("Book Not Found!"));
     }
+
+    public Book changeBookPrice(Long id, Double newPrice) throws DatabaseRepositoryException {
+        if (id == null || id <= 0)
+            throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
+
+        if (newPrice == null || newPrice < 0)
+            throw new IllegalArgumentException("New Price Cannot be Null or Negative!");
+
+        if (!bookRepository.updatePrice(id, newPrice))
+            throw new BookNotFoundException("Book Not Found!");
+
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException("Book Not Found!"));
+    }
 }
