@@ -9,7 +9,7 @@ import ir.library.repository.MemberRepository;
 import java.util.List;
 
 public class MemberService {
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     public MemberService() {
         this.memberRepository = new MemberRepository();

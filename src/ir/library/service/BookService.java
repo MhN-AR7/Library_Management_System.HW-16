@@ -8,7 +8,7 @@ import ir.library.repository.BookRepository;
 import java.util.List;
 
 public class BookService {
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
     public BookService() {
         this.bookRepository = new BookRepository();
