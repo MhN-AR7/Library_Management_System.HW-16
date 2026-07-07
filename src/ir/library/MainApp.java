@@ -1,9 +1,6 @@
 package ir.library;
 
-import ir.library.exception.DatabaseConnectionException;
-import ir.library.exception.DatabaseRepositoryException;
-import ir.library.exception.DuplicateMemberException;
-import ir.library.exception.MemberNotFoundException;
+import ir.library.exception.*;
 import ir.library.service.BookService;
 import ir.library.service.MemberService;
 import ir.library.util.DatabaseConfig;
@@ -77,11 +74,24 @@ public class MainApp {
                 case 3:
                     try {
                         System.out.println("\n---- Finding Member By ID ----\n");
-                        System.out.println("Enter Member ID: ");
+                        System.out.println("Enter Member's ID: ");
                         Long id = input.nextLong();
+                        input.nextLine();
                         System.out.println(memberService.getById(id));
                     }
                     catch (IllegalArgumentException | MemberNotFoundException e) {
+                        System.err.println(e.getMessage());
+                    }
+                    break;
+                case 4:
+                    try {
+                        System.out.println("\n---- Finding Book By ID ----\n");
+                        System.out.println("Enter Book's ID: ");
+                        Long id = input.nextLong();
+                        input.nextLine();
+                        System.out.println(bookService.getById(id));
+                    }
+                    catch (IllegalArgumentException | BookNotFoundException e) {
                         System.err.println(e.getMessage());
                     }
                     break;
