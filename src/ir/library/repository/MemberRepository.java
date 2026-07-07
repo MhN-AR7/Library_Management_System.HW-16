@@ -99,7 +99,7 @@ public class MemberRepository {
             return rs.next();
         }
         catch (SQLException e) {
-            throw new DatabaseRepositoryException("PostgreSQL Syntax Incorrect!");
+            throw new DatabaseRepositoryException("Check Exist Phone Number From Database Failed!");
         }
     }
 }
