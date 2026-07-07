@@ -12,7 +12,7 @@ public class BookService {
         this.bookRepository = new BookRepository();
     }
 
-    public Long registerBook(String title, String author, Double price, Integer stock) throws DatabaseRepositoryException {
+    public Long register(String title, String author, Double price, Integer stock) throws DatabaseRepositoryException {
         if (title == null || title.isBlank() || title.length() > 100)
             throw new IllegalArgumentException("Title Cannot be Null or Empty and The Length Must Less Than 100!");
 
@@ -28,7 +28,7 @@ public class BookService {
         return bookRepository.insert(new Book(title, author, price, stock));
     }
 
-    public Book getBookById(Long id) throws DatabaseRepositoryException {
+    public Book getById(Long id) throws DatabaseRepositoryException {
         if (id == null || id <= 0)
             throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
 
@@ -40,7 +40,7 @@ public class BookService {
                 .orElseThrow(() -> new BookNotFoundException("Book Not Found!"));
     }
 
-    public Book changeBookPrice(Long id, Double newPrice) throws DatabaseRepositoryException {
+    public Book changePrice(Long id, Double newPrice) throws DatabaseRepositoryException {
         if (id == null || id <= 0)
             throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
 
@@ -52,5 +52,15 @@ public class BookService {
 
         return bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException("Book Not Found!"));
+    }
+
+    public Long delete(Long id) throws DatabaseRepositoryException {
+        if (id == null || id <= 0)
+            throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
+
+        if (!bookRepository.delete(id))
+            throw new BookNotFoundException("Book Not Found!");
+
+        return id;
     }
 }
