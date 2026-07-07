@@ -5,6 +5,8 @@ import ir.library.exception.DatabaseRepositoryException;
 import ir.library.model.Book;
 import ir.library.repository.BookRepository;
 
+import java.util.List;
+
 public class BookService {
     private BookRepository bookRepository;
 
@@ -62,5 +64,9 @@ public class BookService {
             throw new BookNotFoundException("Book Not Found!");
 
         return id;
+    }
+
+    public List<Book> getAll() throws DatabaseRepositoryException {
+        return bookRepository.findAll();
     }
 }
