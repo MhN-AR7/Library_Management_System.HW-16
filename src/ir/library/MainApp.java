@@ -111,7 +111,68 @@ public class MainApp {
                     else books.forEach(System.out::println);
                     break;
                 case 7:
-
+                    try {
+                        System.out.println("\n---- Updating Members's Full Name ----\n");
+                        System.out.println("Enter Member's ID: ");
+                        Long id = input.nextLong();
+                        input.nextLine();
+                        System.out.println("Enter New Full Name: ");
+                        String newFullName = input.nextLine();
+                        Member member = memberService.changeFullName(id, newFullName);
+                        System.out.println("Member Updated Successfully!\n" + member);
+                    }
+                    catch (IllegalArgumentException | MemberNotFoundException e) {
+                        System.err.println(e.getMessage());
+                    }
+                    break;
+                case 8:
+                    try {
+                        System.out.println("\n---- Updating Book's Price ----\n");
+                        System.out.println("Enter Book's ID: ");
+                        Long id = input.nextLong();
+                        input.nextLine();
+                        System.out.println("Enter New Price: ");
+                        Double newPrice = input.nextDouble();
+                        input.nextLine();
+                        Book book = bookService.changePrice(id, newPrice);
+                        System.out.println("Book Updated Successfully!\n" + book);
+                    }
+                    catch (IllegalArgumentException | BookNotFoundException e) {
+                        System.err.println(e.getMessage());
+                    }
+                    break;
+                case 9:
+                    try {
+                        System.out.println("\n---- Deleting Member ----\n");
+                        System.out.println("Enter Member's ID: ");
+                        Long id = input.nextLong();
+                        input.nextLine();
+                        id = memberService.delete(id);
+                        System.out.println("Member Deleted Successfully!\nID: " + id);
+                    }
+                    catch (IllegalArgumentException | MemberNotFoundException e) {
+                        System.err.println(e.getMessage());
+                    }
+                    break;
+                case 10:
+                    try {
+                        System.out.println("\n---- Deleting Book ----\n");
+                        System.out.println("Enter Book's ID: ");
+                        Long id = input.nextLong();
+                        input.nextLine();
+                        id = bookService.delete(id);
+                        System.out.println("Book Deleted Successfully!\nID: " + id);
+                    }
+                    catch (IllegalArgumentException | BookNotFoundException e) {
+                        System.err.println(e.getMessage());
+                    }
+                    break;
+                case 0:
+                    System.out.println("Exiting Program...");
+                    return;
+                default:
+                    System.out.println("Invalid Choice!\nTry Again.");
+                    break;
             }
         }
     }
