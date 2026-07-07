@@ -1,5 +1,6 @@
 package ir.library.repository;
 
+import ir.library.exception.DatabaseConnectionException;
 import ir.library.exception.DatabaseRepositoryException;
 import ir.library.model.Book;
 import ir.library.util.DatabaseConfig;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class BookRepository {
-    public Long insert(Book book) throws DatabaseRepositoryException {
+    public Long insert(Book book) throws DatabaseRepositoryException, DatabaseConnectionException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -34,7 +35,7 @@ public class BookRepository {
         }
     }
 
-    public Optional<Book> findById(Long id) throws DatabaseRepositoryException {
+    public Optional<Book> findById(Long id) throws DatabaseRepositoryException, DatabaseConnectionException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -61,7 +62,7 @@ public class BookRepository {
         }
     }
 
-    public boolean updatePrice(Long id, Double newPrice) throws DatabaseRepositoryException {
+    public boolean updatePrice(Long id, Double newPrice) throws DatabaseRepositoryException, DatabaseConnectionException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -79,7 +80,7 @@ public class BookRepository {
         }
     }
 
-    public boolean delete(Long id) throws DatabaseRepositoryException {
+    public boolean delete(Long id) throws DatabaseRepositoryException, DatabaseConnectionException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -96,7 +97,7 @@ public class BookRepository {
         }
     }
 
-    public List<Book> findAll() throws DatabaseRepositoryException {
+    public List<Book> findAll() throws DatabaseRepositoryException, DatabaseConnectionException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(

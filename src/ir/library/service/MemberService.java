@@ -1,5 +1,6 @@
 package ir.library.service;
 
+import ir.library.exception.DatabaseConnectionException;
 import ir.library.exception.DatabaseRepositoryException;
 import ir.library.exception.DuplicateMemberException;
 import ir.library.exception.MemberNotFoundException;
@@ -15,7 +16,7 @@ public class MemberService {
         this.memberRepository = new MemberRepository();
     }
 
-    public Long register(String fullName, String phoneNumber) throws DatabaseRepositoryException {
+    public Long register(String fullName, String phoneNumber) throws DatabaseRepositoryException, DatabaseConnectionException {
         if (fullName == null || fullName.isBlank() || fullName.length() > 100)
             throw new IllegalArgumentException("Full Name Cannot be Null or Empty and The Length Must Less Than 100!");
 
@@ -28,7 +29,7 @@ public class MemberService {
         return memberRepository.insert(new Member(fullName, phoneNumber));
     }
 
-    public Member getById(Long id) throws DatabaseRepositoryException {
+    public Member getById(Long id) throws DatabaseRepositoryException, DatabaseConnectionException {
         if (id == null || id <= 0)
             throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
 
@@ -40,7 +41,7 @@ public class MemberService {
                 .orElseThrow(() -> new MemberNotFoundException("Member Not Found!"));
     }
 
-    public Member changeFullName(Long id, String newFullName) throws DatabaseRepositoryException {
+    public Member changeFullName(Long id, String newFullName) throws DatabaseRepositoryException, DatabaseConnectionException {
         if (id == null || id <= 0)
             throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
 
@@ -54,7 +55,7 @@ public class MemberService {
                 .orElseThrow(() -> new MemberNotFoundException("Member Not Found!"));
     }
 
-    public Long delete(Long id) throws DatabaseRepositoryException {
+    public Long delete(Long id) throws DatabaseRepositoryException, DatabaseConnectionException {
         if (id == null || id <= 0)
             throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
 
@@ -64,7 +65,7 @@ public class MemberService {
         return id;
     }
 
-    public List<Member> getAll() throws DatabaseRepositoryException {
+    public List<Member> getAll() throws DatabaseRepositoryException, DatabaseConnectionException {
         return memberRepository.findAll();
     }
 }

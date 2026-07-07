@@ -1,6 +1,7 @@
 package ir.library.service;
 
 import ir.library.exception.BookNotFoundException;
+import ir.library.exception.DatabaseConnectionException;
 import ir.library.exception.DatabaseRepositoryException;
 import ir.library.model.Book;
 import ir.library.repository.BookRepository;
@@ -14,7 +15,7 @@ public class BookService {
         this.bookRepository = new BookRepository();
     }
 
-    public Long register(String title, String author, Double price, Integer stock) throws DatabaseRepositoryException {
+    public Long register(String title, String author, Double price, Integer stock) throws DatabaseRepositoryException, DatabaseConnectionException {
         if (title == null || title.isBlank() || title.length() > 100)
             throw new IllegalArgumentException("Title Cannot be Null or Empty and The Length Must Less Than 100!");
 
@@ -30,7 +31,7 @@ public class BookService {
         return bookRepository.insert(new Book(title, author, price, stock));
     }
 
-    public Book getById(Long id) throws DatabaseRepositoryException {
+    public Book getById(Long id) throws DatabaseRepositoryException, DatabaseConnectionException {
         if (id == null || id <= 0)
             throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
 
@@ -42,7 +43,7 @@ public class BookService {
                 .orElseThrow(() -> new BookNotFoundException("Book Not Found!"));
     }
 
-    public Book changePrice(Long id, Double newPrice) throws DatabaseRepositoryException {
+    public Book changePrice(Long id, Double newPrice) throws DatabaseRepositoryException, DatabaseConnectionException {
         if (id == null || id <= 0)
             throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
 
@@ -56,7 +57,7 @@ public class BookService {
                 .orElseThrow(() -> new BookNotFoundException("Book Not Found!"));
     }
 
-    public Long delete(Long id) throws DatabaseRepositoryException {
+    public Long delete(Long id) throws DatabaseRepositoryException, DatabaseConnectionException {
         if (id == null || id <= 0)
             throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
 
@@ -66,7 +67,7 @@ public class BookService {
         return id;
     }
 
-    public List<Book> getAll() throws DatabaseRepositoryException {
+    public List<Book> getAll() throws DatabaseRepositoryException, DatabaseConnectionException {
         return bookRepository.findAll();
     }
 }

@@ -1,5 +1,6 @@
 package ir.library.repository;
 
+import ir.library.exception.DatabaseConnectionException;
 import ir.library.exception.DatabaseRepositoryException;
 import ir.library.model.Member;
 import ir.library.util.DatabaseConfig;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class MemberRepository {
-    public Long insert(Member member) throws DatabaseRepositoryException {
+    public Long insert(Member member) throws DatabaseRepositoryException, DatabaseConnectionException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -32,7 +33,7 @@ public class MemberRepository {
         }
     }
 
-    public Optional<Member> findById(Long id) throws DatabaseRepositoryException {
+    public Optional<Member> findById(Long id) throws DatabaseRepositoryException, DatabaseConnectionException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -56,7 +57,7 @@ public class MemberRepository {
         }
     }
 
-    public boolean updateFullName(Long id, String newFullName) throws DatabaseRepositoryException {
+    public boolean updateFullName(Long id, String newFullName) throws DatabaseRepositoryException, DatabaseConnectionException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -74,7 +75,7 @@ public class MemberRepository {
         }
     }
 
-    public boolean delete(Long id) throws DatabaseRepositoryException {
+    public boolean delete(Long id) throws DatabaseRepositoryException, DatabaseConnectionException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -91,7 +92,7 @@ public class MemberRepository {
         }
     }
 
-    public boolean existByPhoneNumber(String phoneNumber) throws DatabaseRepositoryException {
+    public boolean existByPhoneNumber(String phoneNumber) throws DatabaseRepositoryException, DatabaseConnectionException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
@@ -107,7 +108,7 @@ public class MemberRepository {
         }
     }
 
-    public List<Member> findAll() throws DatabaseRepositoryException {
+    public List<Member> findAll() throws DatabaseRepositoryException, DatabaseConnectionException {
         Connection connection = DatabaseConfig.getConnection();
 
         try (PreparedStatement ps = connection.prepareStatement(
