@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class MemberRepository {
@@ -100,6 +102,29 @@ public class MemberRepository {
         }
         catch (SQLException e) {
             throw new DatabaseRepositoryException("Check Exist Phone Number From Database Failed!");
+        }
+    }
+
+    public List<Member> findAll() throws DatabaseRepositoryException {
+        Connection connection = DatabaseConfig.getConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM members"
+        )) {
+            ResultSet rs = ps.executeQuery();
+            List<Member> members = new ArrayList<>();
+
+            while (rs.next()) {
+                //FIXME: use setter for all fields
+                Member newMember = new Member(rs.getString("full_name"), rs.getString("phone_number"));
+                newMember.setId(rs.getLong("id"));
+                members.add(newMember);
+            }
+
+            return members;
+        }
+        catch (SQLException e) {
+            throw new DatabaseRepositoryException("Find All Member From Database Failed!");
         }
     }
 }
