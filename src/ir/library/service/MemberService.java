@@ -13,7 +13,7 @@ public class MemberService {
         this.memberRepository = new MemberRepository();
     }
 
-    public Long registerMember(String fullName, String phoneNumber) throws DatabaseRepositoryException {
+    public Long register(String fullName, String phoneNumber) throws DatabaseRepositoryException {
         if (fullName == null || fullName.isBlank() || fullName.length() > 100)
             throw new IllegalArgumentException("Full Name Cannot be Null or Empty and The Length Must Less Than 100!");
 
@@ -26,7 +26,7 @@ public class MemberService {
         return memberRepository.insert(new Member(fullName, phoneNumber));
     }
 
-    public Member getMemberById(Long id) throws DatabaseRepositoryException {
+    public Member getById(Long id) throws DatabaseRepositoryException {
         if (id == null || id <= 0)
             throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
 
@@ -38,7 +38,7 @@ public class MemberService {
                 .orElseThrow(() -> new MemberNotFoundException("Member Not Found!"));
     }
 
-    public Member changeMemberFullName(Long id, String newFullName) throws DatabaseRepositoryException {
+    public Member changeFullName(Long id, String newFullName) throws DatabaseRepositoryException {
         if (id == null || id <= 0)
             throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
 
@@ -50,5 +50,15 @@ public class MemberService {
 
         return memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException("Member Not Found!"));
+    }
+
+    public Long delete(Long id) throws DatabaseRepositoryException {
+        if (id == null || id <= 0)
+            throw new IllegalArgumentException("ID Cannot be Null or Less Than 1!");
+
+        if (!memberRepository.delete(id))
+            throw new MemberNotFoundException("Member Not Found!");
+
+        return id;
     }
 }
