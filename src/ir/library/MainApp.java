@@ -1,10 +1,13 @@
 package ir.library;
 
 import ir.library.exception.*;
+import ir.library.model.Book;
+import ir.library.model.Member;
 import ir.library.service.BookService;
 import ir.library.service.MemberService;
 import ir.library.util.DatabaseConfig;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class MainApp {
@@ -95,6 +98,20 @@ public class MainApp {
                         System.err.println(e.getMessage());
                     }
                     break;
+                case 5:
+                    System.out.println("\n---- Finding All Members ----\n");
+                    List<Member> members = memberService.getAll();
+                    if (members.isEmpty()) System.out.println("No Members Found!");
+                    else members.forEach(System.out::println);
+                    break;
+                case 6:
+                    System.out.println("\n---- Finding All Books ----\n");
+                    List<Book> books = bookService.getAll();
+                    if (books.isEmpty()) System.out.println("No Books Found!");
+                    else books.forEach(System.out::println);
+                    break;
+                case 7:
+
             }
         }
     }
