@@ -1,6 +1,5 @@
 package ir.library.repository;
 
-import ir.library.exception.MemberNotFoundException;
 import ir.library.exception.DatabaseRepositoryException;
 import ir.library.model.Member;
 import ir.library.util.DatabaseConfig;
@@ -118,13 +117,14 @@ public class MemberRepository {
                 //FIXME: use setter for all fields
                 Member newMember = new Member(rs.getString("full_name"), rs.getString("phone_number"));
                 newMember.setId(rs.getLong("id"));
+
                 members.add(newMember);
             }
 
             return members;
         }
         catch (SQLException e) {
-            throw new DatabaseRepositoryException("Find All Member From Database Failed!");
+            throw new DatabaseRepositoryException("Find All Members From Database Failed!");
         }
     }
 }

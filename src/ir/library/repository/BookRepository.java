@@ -1,6 +1,5 @@
 package ir.library.repository;
 
-import ir.library.exception.BookNotFoundException;
 import ir.library.exception.DatabaseRepositoryException;
 import ir.library.model.Book;
 import ir.library.util.DatabaseConfig;
@@ -9,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class BookRepository {
@@ -91,6 +92,35 @@ public class BookRepository {
         }
         catch (SQLException e) {
             throw new DatabaseRepositoryException("Delete Book From Database Failed!");
+        }
+    }
+
+    public List<Book> findAll() throws DatabaseRepositoryException {
+        Connection connection = DatabaseConfig.getConnection();
+
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM books"
+        )) {
+            ResultSet rs = ps.executeQuery();
+            List<Book> books = new ArrayList<>();
+
+            while (rs.next()) {
+                //FIXME: use setter for all fields
+                Book newBook = new Book(
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getDouble("price"),
+                        rs.getInt("stock")
+                );
+                newBook.setId(rs.getLong("id"));
+
+                books.add(newBook);
+            }
+
+            return books;
+        }
+        catch (SQLException e) {
+            throw new DatabaseRepositoryException("Find All Books From Database Failed!");
         }
     }
 }
