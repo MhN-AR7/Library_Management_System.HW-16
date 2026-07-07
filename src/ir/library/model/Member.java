@@ -10,6 +10,12 @@ public class Member {
         this.phoneNumber = phoneNumber;
     }
 
+    public Member(Long id, String fullName, String phoneNumber) {
+        this.id = id;
+        this.fullName = fullName;
+        this.phoneNumber = phoneNumber;
+    }
+
     public Long getId() {
         return id;
     }

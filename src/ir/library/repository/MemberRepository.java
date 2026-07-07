@@ -41,8 +41,11 @@ public class MemberRepository {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Member member = new Member(rs.getString("full_name"), rs.getString("phone_number"));
-                member.setId(id);
+                Member member = new Member(
+                        rs.getLong("id"),
+                        rs.getString("full_name"),
+                        rs.getString("phone_number")
+                );
                 return Optional.of(member);
             }
 
@@ -114,9 +117,11 @@ public class MemberRepository {
             List<Member> members = new ArrayList<>();
 
             while (rs.next()) {
-                //FIXME: use setter for all fields
-                Member newMember = new Member(rs.getString("full_name"), rs.getString("phone_number"));
-                newMember.setId(rs.getLong("id"));
+                Member newMember = new Member(
+                        rs.getLong("id"),
+                        rs.getString("full_name"),
+                        rs.getString("phone_number")
+                );
 
                 members.add(newMember);
             }
